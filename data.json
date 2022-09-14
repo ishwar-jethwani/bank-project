@@ -1,0 +1,21 @@
+[
+    {
+        "name": "",
+        "pancard_no": "",
+        "adhar_no": "",
+        "address": "",
+        "account_no": "",
+        "balance": "",
+        "atm": {
+            "atm_card_no": "",
+            "atm_exprie_date": "",
+            "atm_cvv": ""
+        },
+        "loan_account": {
+            "loan_account_no": "",
+            "total_amount": "",
+            "emi": "",
+            "outstanding_bal": ""
+        }
+    }
+]
