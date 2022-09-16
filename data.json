@@ -1,21 +1,29 @@
 [
     {
-        "name": "",
-        "pancard_no": "",
-        "adhar_no": "",
-        "address": "",
-        "account_no": "",
-        "balance": "",
-        "atm": {
-            "atm_card_no": "",
-            "atm_exprie_date": "",
-            "atm_cvv": ""
-        },
-        "loan_account": {
-            "loan_account_no": "",
-            "total_amount": "",
-            "emi": "",
-            "outstanding_bal": ""
-        }
+        "name": "ishwar",
+        "pancard_no": "Smaya011",
+        "adhar_no": "123456789",
+        "address": "akjjbdfbjh",
+        "account_no": 16533068051,
+        "profile_img": "https://randomuser.me/api/portraits/thumb/men/0.jpg",
+        "balance": 0
+    },
+    {
+        "name": "ishwar",
+        "pancard_no": "Smaya011",
+        "adhar_no": "123456789",
+        "address": "akjjbdfbjh",
+        "account_no": 71192725665,
+        "profile_img": "https://randomuser.me/api/portraits/thumb/men/0.jpg",
+        "balance": 0
+    },
+    {
+        "name": "ishwar",
+        "pancard_no": "Smaya011",
+        "adhar_no": "123456789",
+        "address": "akjjbdfbjh",
+        "account_no": 74258103325,
+        "profile_img": "https://randomuser.me/api/portraits/thumb/men/0.jpg",
+        "balance": 0
     }
 ]
