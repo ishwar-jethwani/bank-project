@@ -1,4 +1,3 @@
-from curses.ascii import isalpha, isdigit
 import random
 import json
 class BankAccount:
