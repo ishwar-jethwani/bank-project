@@ -1,12 +1,12 @@
 import random
 import json
 class BankAccount:
-    def __init__(self,name,aadharcard,pancard,address,photo):
-        self.name = name
-        self.adhar_no = aadharcard
-        self.pan_no = pancard
-        self.address = address
-        self.photo = photo
+    def __init__(self,kwargs):
+        self.name = kwargs["name"]
+        self.adhar_no = kwargs["adhar_no"] if "adhar_no" in kwargs else None
+        self.pan_no = kwargs["pancard_no"] if "pancard_no" in kwargs else None
+        self.address = kwargs["address"]
+        self.photo = kwargs["photo"]
 
     def open_account(self):
         account_no = random.randint(10000000000,99999999999)
@@ -32,23 +32,70 @@ class BankAccount:
             data.extend(data_list)
             data = json.dumps(data)
             file.write(data)
+    def search_customer(self,account_no ):
+        with open("data.json","r") as file:
+            data = file.read()
+            data = json.loads(data)
+            for customer in data:
+                if customer["account_no"]==account_no:
+                    return customer
+                else:
+                    return print("customer not found!")
+
+    def deposite(self,account_no,balance_deposite):
+        cust_balance = self.search_customer(account_no)
+        cust_balance["balance"]+=float(balance_deposite)
+        return cust_balance["balance"]
+
+    def withdrow(self,account_no,balance_deposite):
+        cust_balance = self.search_customer(account_no)
+        cust_balance["balance"]-=float(balance_deposite)
+        return cust_balance["balance"]
+
+    def check_balance(self,account_no):
+        cust_balance = self.search_customer(account_no)
+        return cust_balance["balance"]
+
+
+
     
 
 name = str(input("name of account holder:"))
 adhar_card = str(input("enter the adhar no:"))
+pancard_no = str(input("Pancard Card No:"))
+address = str(input("Address:"))
+photo = str(input("add link of your photo:"))
+user_input = {
+        "name":name,
+        "address":address,
+        "photo":photo
+}
+
 if len(adhar_card)==12 and adhar_card.isdigit()==True:
-    pass
+    
+    user_input["adhar_no"]= adhar_card
 else:
     print("please inter the coreect no")
-pancard_no = str(input("Pancard Card No:"))
 
-a = "APGPJ1234O"
 if pancard_no[:2].isalpha()==True and pancard_no[3] in ["A","B","C","F","G","H","L","J","P","T"] and pancard_no[5:-1].isdigit()==True and pancard_no[-1].isalpha()==True:
-    pass
+    user_input["pancard_no"]=pancard_no
 else:
     print("please write correct pan card no.")
 
-
-obj = BankAccount("ishwar","123456789","Smaya011","akjjbdfbjh","https://randomuser.me/api/portraits/thumb/men/0.jpg")
+while True:
+    q = str(input("press q for quit:")).upper()
+    if q=="Q":
+        print("thank you using this program:")
+        break
+    else:
+        choose = int(input(""""
+        1 for open account
+        2 for deposite in account
+        3 for withdrow 
+        
+        """))
+        
+obj = BankAccount(user_input)
 obj.open_account()
+obj.deposite()
 
