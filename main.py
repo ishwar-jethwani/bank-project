@@ -1,5 +1,6 @@
 import random
 import json
+from datetime import datetime,timedelta
 
 class BankAccount:
     def open_account(self,kwargs):
@@ -33,15 +34,17 @@ class BankAccount:
             file.write(data)
             return print("your account no is",self.account_no)
 
-    def search_customer(self,account_no ):
+    def search_customer(self,account_no=None,atm_card_no=None):
         with open("data.json","r",encoding="utf-8") as file:
             data = file.read()
             data = json.loads(data)
-            for customer in data:
-                if account_no ==customer["account_no"]:
-                    return [customer,data]
-            else:
-                return print("customer not found!")
+            if account_no is not None or atm_card_no is not None:
+                for customer in data:
+                    if account_no ==customer["account_no"] or atm_card_no==customer["atm"]["card_no"]:
+                        return [customer,data]
+                else:
+                    return print("customer not found!")
+            return print("please enter the account no or atm card")
 
     def deposite(self,account_no,balance_deposite):
         custmer = self.search_customer(account_no)[0]
@@ -76,6 +79,77 @@ class BankAccount:
         return cust_balance["balance"]
 
 
+# base class ---->Drvie class 
+# single inheritance 1 base class ----> drive class
+# BankAccount--->AtmCard
+# multiple inheritance
+# 1 base class --> multiple drive class
+# BankAccount-->AtmCard
+# BankAccount-->LoanAccount
+# multilable inheritance
+# Base class ----> drive class--->drive class
+
+class AtmCard(BankAccount):
+    def asign_atm_card(self,account_no):
+        self.card_no = random.randint(1000000000000000,9999999999999999)
+        self.expire_date_obj = datetime.today()+timedelta(days=1095)
+        self.expire_date = str(self.expire_date_obj.strftime("%b/%y"))
+        self.cvv=random.randint(100,999)
+        customer = self.search_customer(account_no)[0]
+        data = self.search_customer(account_no)[1]
+        data[data.index(customer)]["atm"]={
+            "card_no":self.card_no,
+            "expire_date":self.expire_date,
+            "cvv":self.cvv
+        }
+        with open("data.json","w",encoding="utf-8") as file:
+            data = json.dumps(data)
+            file.write(data)
+        return print("Atm is asigned sucessfully!")
+    def genrate_pin(self,account_no,atm_card_no,pin=None):
+        customer = self.search_customer(account_no)[0]
+        if customer["atm"]["card_no"]==atm_card_no:
+            print("you are verified customer")
+            if pin is not None:
+                pin = pin
+            else:
+                pin = int(input("Enter 4 Number Pin:"))
+            data = self.search_customer(account_no)[1]
+            data[data.index(customer)]["atm"]["pin"]=pin
+            with open("data.json","w",encoding="utf-8") as file:
+                data = json.dumps(data)
+                file.write(data)
+            return print("pin genrated sucessfully!")
+            
+
+    def atm_withdrow(self, atm_card_no, balance_withdrow):
+        customer = self.search_customer(atm_card_no=atm_card_no)[0]
+        if customer["atm"]["card_no"]==atm_card_no:
+            pin = int(input("enter four digit pin:"))
+            try:
+                if customer["atm"]["pin"]==pin:
+                    account_no = customer["account_no"]
+                    return super().withdrow(account_no, balance_withdrow)
+            except KeyError:
+                print("please genrate pin")
+                atm_card_no = customer["atm"]["card_no"]
+                account_no = customer["account_no"]
+                self.genrate_pin(account_no,atm_card_no,pin)
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+# Driver Code 
 
 while True:
     q = str(input("press q for quit:")).upper()
@@ -89,9 +163,11 @@ while True:
         1 for open account
         2 for deposite in account
         3 for withdrow from account
-        4 for checke balance
+        4 for check balance
+        5 for getting atm card
+        6 for withdrow from atm
         enter:"""))
-        obj = BankAccount()
+        obj = AtmCard()
         if choose==1:
             name = str(input("name of account holder:"))
             adhar_card = str(input("enter the adhar no:"))
@@ -126,6 +202,13 @@ while True:
         elif choose==4:
             account_no = int(input("please enter your account no:"))
             print(obj.check_balance(account_no))
+        elif choose==5:
+            account_no = int(input("please enter your account no:"))
+            print(obj.asign_atm_card(account_no))
+        elif choose==6:
+            atm_card_no = int(input("please enter your atm card no:"))
+            amount = float(input("how mach do you want to withdrow:"))
+            print(obj.atm_withdrow(atm_card_no,amount))
         else:
             print("please enter correct option")
 
