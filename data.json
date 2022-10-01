@@ -1,17 +1,1 @@
-[
-    {
-        "name": "ishwar",
-        "pancard_no": "BAKPL3891L",
-        "adhar_no": "123456789123",
-        "address": "gadarwara",
-        "account_no": 52310022872,
-        "profile_img": "new.com",
-        "balance": 500.0,
-        "atm": {
-            "card_no": 4406809571181032,
-            "expire_date": "Sep/25",
-            "cvv": 321,
-            "pin": 1020
-        }
-    }
-]
+[{"name": "ishwar", "pancard_no": "BAKPL3891L", "adhar_no": "123456789123", "address": "gadarwara", "account_no": 52310022872, "profile_img": "new.com", "balance": 300.0, "atm": {"card_no": 4406809571181032, "expire_date": "Sep/25", "cvv": 321, "pin": 1234}}]

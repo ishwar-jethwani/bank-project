@@ -121,7 +121,6 @@ class AtmCard(BankAccount):
                 file.write(data)
             return print("pin genrated sucessfully!")
             
-
     def atm_withdrow(self, atm_card_no, balance_withdrow):
         customer = self.search_customer(atm_card_no=atm_card_no)[0]
         if customer["atm"]["card_no"]==atm_card_no:
@@ -135,6 +134,21 @@ class AtmCard(BankAccount):
                 atm_card_no = customer["atm"]["card_no"]
                 account_no = customer["account_no"]
                 self.genrate_pin(account_no,atm_card_no,pin)
+
+    def change_pin(self,atm_card_no,old_pin):
+        customer = self.search_customer(atm_card_no=atm_card_no)[0]
+        if customer["atm"]["pin"]==old_pin:
+            account_no = customer["account_no"]
+            self.genrate_pin(account_no=account_no,atm_card_no=atm_card_no)
+        else:
+            print("you have entered wrong pin")
+
+    def check_balance(self,atm_card_no):
+        cust_balance = self.search_customer(atm_card_no=atm_card_no)[0]
+        return cust_balance["balance"]
+
+    
+        
 
 
 
@@ -166,6 +180,7 @@ while True:
         4 for check balance
         5 for getting atm card
         6 for withdrow from atm
+        7 for change atm pin
         enter:"""))
         obj = AtmCard()
         if choose==1:
@@ -209,6 +224,10 @@ while True:
             atm_card_no = int(input("please enter your atm card no:"))
             amount = float(input("how mach do you want to withdrow:"))
             print(obj.atm_withdrow(atm_card_no,amount))
+        elif choose == 7:
+            atm_card_no = int(input("please enter your atm card no:"))
+            old_pin = int(input("enter the old pin:"))
+            obj.change_pin(atm_card_no,old_pin)
         else:
             print("please enter correct option")
 
