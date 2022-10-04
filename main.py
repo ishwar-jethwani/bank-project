@@ -147,20 +147,55 @@ class AtmCard(BankAccount):
         cust_balance = self.search_customer(atm_card_no=atm_card_no)[0]
         return cust_balance["balance"]
 
-    
-        
-
-
-
-
-
-        
-
-
-
-
-
-
+class LoanAccount(BankAccount):
+    def apply_for_loan(self,account_no):
+        customer = self.search_customer(account_no=account_no)[0]
+        if customer:
+            user_input_amount = float(input("Enter the Loan Amount:"))
+            print("Note:","The total Principal amount calculatation is based on your cash flow")
+            if customer["balance"]*5<user_input_amount:
+                user_input_amount = user_input_amount*0.75
+        type_of_loan = int(input("""
+            enter the type of loan 
+            1 Personal Loan
+            2 Education Loan
+            3 Home Loan
+            4 Car Loan
+            5 Gold Loan
+            enter option:"""))
+        roi = ""
+        total_year = 0
+        if type_of_loan == 1:
+            roi = "16%"
+            total_year = int(input("How many year of time do you want for your personal loan:"))
+        elif type_of_loan==2:
+            roi = "12%"
+            total_year = 7
+        elif type_of_loan==3:
+            roi = "7.72"
+            total_year = 20
+        elif type_of_loan==4:
+            roi = "8%"
+            total_year = 8
+        elif type_of_loan==5:
+            roi = "8%"
+            total_year = 3
+        data = self.search_customer(account_no)[1]
+        amount = user_input_amount*(1+eval(roi[0])/100)**total_year
+        emi = amount/12
+        loan_account_no = random.randint(10000000000,99999999999)
+        data[data.index(customer)]["loan_account"]={
+            "loan_account_no":loan_account_no,
+            "total_amount":user_input_amount,
+            "emi":emi,
+            "no_of_emi":f"{total_year*12}" ,
+            "roi":roi,
+            "total_months":f"{total_year*12} months"
+        }
+        with open("data.json","w") as file:
+            data = json.dumps(data)
+            file.write(data)
+        return print("your loan account is successfully opened ")
 
 
 # Driver Code 
@@ -181,8 +216,10 @@ while True:
         5 for getting atm card
         6 for withdrow from atm
         7 for change atm pin
+        8 for Applying for loan amount
         enter:"""))
         obj = AtmCard()
+        obj_loan = LoanAccount()
         if choose==1:
             name = str(input("name of account holder:"))
             adhar_card = str(input("enter the adhar no:"))
@@ -228,6 +265,9 @@ while True:
             atm_card_no = int(input("please enter your atm card no:"))
             old_pin = int(input("enter the old pin:"))
             obj.change_pin(atm_card_no,old_pin)
+        elif choose == 8:
+            account_no = int(input("please enter your account no:"))
+            obj_loan.apply_for_loan(account_no=account_no)
         else:
             print("please enter correct option")
 
