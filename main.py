@@ -215,6 +215,12 @@ class LoanAccount(BankAccount):
             data = json.dumps(data)
             file.write(data)
         return print(balance,out_standing_balance)
+
+    def check_outstanding_balance(self,loan_account_no):
+        search_customer_data = self.search_customer(loan_account_no=loan_account_no)
+        customer = search_customer_data[0]
+        return print(customer["loan_account"]["outstanding_balance"],"/- rs only")
+
         
 
 
@@ -238,6 +244,7 @@ while True:
         7 for change atm pin
         8 for Applying for loan amount
         9 for depositing EMI
+        10 for check out standing balance
         enter:"""))
         obj = AtmCard()
         obj_loan = LoanAccount()
@@ -292,7 +299,10 @@ while True:
         elif choose == 9:
             loan_account_no = int(input("please enter your loan account no:"))
             amount = float(input("how mach do you want to emi deposite:"))
-            obj_loan.emi_deposite(loan_account_no=loan_account_no,emi_deposite=amount)           
+            obj_loan.emi_deposite(loan_account_no=loan_account_no,emi_deposite=amount)    
+        elif choose == 10:
+            loan_account_no = int(input("please enter your loan account no:"))
+            obj_loan.check_outstanding_balance(loan_account_no)       
         else:
             print("please enter correct option")
 
