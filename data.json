@@ -6,7 +6,7 @@
         "address": "gadarwara",
         "account_no": 52310022872,
         "profile_img": "new.com",
-        "balance": 300.0,
+        "balance": 85.35,
         "atm": {
             "card_no": 4406809571181032,
             "expire_date": "Sep/25",
@@ -14,12 +14,22 @@
             "pin": 1234
         },
         "loan_account": {
-            "loan_account_no": 17389224301,
-            "total_amount": 1000.0,
-            "emi": 84.16666666666667,
-            "no_of_emi": "12",
+            "loan_account_no": 51368530023,
+            "total_amount": 7500.0,
+            "emi": 214.65,
+            "no_of_emi": "36",
             "roi": "16%",
-            "total_months": "12 months"
+            "total_months": "36 months",
+            "outstanding_balance": 7512.610000000001
         }
+    },
+    {
+        "name": "hariom",
+        "pancard_no": "HAGPM1598L",
+        "adhar_no": "123456789123",
+        "address": "satna",
+        "account_no": 82629463128,
+        "profile_img": "link.com",
+        "balance": 0
     }
 ]

@@ -34,26 +34,26 @@ class BankAccount:
             file.write(data)
             return print("your account no is",self.account_no)
 
-    def search_customer(self,account_no=None,atm_card_no=None):
+    def search_customer(self,account_no=None,atm_card_no=None,loan_account_no=None):
         with open("data.json","r",encoding="utf-8") as file:
             data = file.read()
             data = json.loads(data)
-            if account_no is not None or atm_card_no is not None:
+            if account_no is not None or atm_card_no is not None or loan_account_no is not None:
                 for customer in data:
-                    if account_no ==customer["account_no"] or atm_card_no==customer["atm"]["card_no"]:
+                    if account_no ==customer["account_no"] or atm_card_no==customer["atm"]["card_no"] or loan_account_no==customer["loan_account"]["loan_account_no"]:
                         return [customer,data]
                 else:
                     return print("customer not found!")
             return print("please enter the account no or atm card")
 
     def deposite(self,account_no,balance_deposite):
-        custmer = self.search_customer(account_no)[0]
-        balance = custmer["balance"]
+        customer = self.search_customer(account_no)[0]
+        balance = customer["balance"]
         data = self.search_customer(account_no)[1]
         if balance==None:
             balance = 0
         balance+=float(balance_deposite)
-        data[data.index(custmer)]["balance"]=balance
+        data[data.index(customer)]["balance"]=balance
         with open("data.json","w",encoding="utf-8") as file:
             data = json.dumps(data)
             file.write(data)
@@ -62,13 +62,13 @@ class BankAccount:
         
             
     def withdrow(self,account_no,balance_withdrow):
-        custmer = self.search_customer(account_no)[0]
-        balance = custmer["balance"]
+        customer = self.search_customer(account_no)[0]
+        balance = customer["balance"]
         data = self.search_customer(account_no)[1]
         if balance==None:
             balance = 0
         balance-=float(balance_withdrow)
-        data[data.index(custmer)]["balance"]=balance
+        data[data.index(customer)]["balance"]=balance
         with open("data.json","w",encoding="utf-8") as file:
             data = json.dumps(data)
             file.write(data)
@@ -181,8 +181,8 @@ class LoanAccount(BankAccount):
             roi = "8%"
             total_year = 3
         data = self.search_customer(account_no)[1]
-        amount = user_input_amount*(1+eval(roi[0])/100)**total_year
-        emi = amount/12
+        amount = round(user_input_amount*(1+eval(roi[0])/100)**total_year,2)
+        emi = round(amount/(12*total_year),2)
         loan_account_no = random.randint(10000000000,99999999999)
         data[data.index(customer)]["loan_account"]={
             "loan_account_no":loan_account_no,
@@ -190,12 +190,32 @@ class LoanAccount(BankAccount):
             "emi":emi,
             "no_of_emi":f"{total_year*12}" ,
             "roi":roi,
-            "total_months":f"{total_year*12} months"
+            "total_months":f"{total_year*12} months",
+            "outstanding_balance": amount
         }
         with open("data.json","w") as file:
             data = json.dumps(data)
             file.write(data)
         return print("your loan account is successfully opened ")
+
+    def emi_deposite(self,loan_account_no,emi_deposite):
+        search_customer_data = self.search_customer(loan_account_no=loan_account_no)
+        customer = search_customer_data[0]
+        if customer:
+            balance = customer["balance"]
+        data = search_customer_data[1]
+        if balance==None:
+            balance = 0
+        balance-=float(emi_deposite)
+        out_standing_balance = customer["loan_account"]["outstanding_balance"]
+        out_standing_balance-=emi_deposite
+        data[data.index(customer)]["balance"]=balance
+        data[data.index(customer)]["loan_account"]["outstanding_balance"]=round(out_standing_balance,2)
+        with open("data.json","w",encoding="utf-8") as file:
+            data = json.dumps(data)
+            file.write(data)
+        return print(balance,out_standing_balance)
+        
 
 
 # Driver Code 
@@ -217,6 +237,7 @@ while True:
         6 for withdrow from atm
         7 for change atm pin
         8 for Applying for loan amount
+        9 for depositing EMI
         enter:"""))
         obj = AtmCard()
         obj_loan = LoanAccount()
@@ -268,6 +289,10 @@ while True:
         elif choose == 8:
             account_no = int(input("please enter your account no:"))
             obj_loan.apply_for_loan(account_no=account_no)
+        elif choose == 9:
+            loan_account_no = int(input("please enter your loan account no:"))
+            amount = float(input("how mach do you want to emi deposite:"))
+            obj_loan.emi_deposite(loan_account_no=loan_account_no,emi_deposite=amount)           
         else:
             print("please enter correct option")
 
